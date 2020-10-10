@@ -2,10 +2,6 @@ const User = require('../resources/users/user.model');
 const Board = require('../resources/board/board.model');
 const Task = require('../resources/tasks/task.model');
 
-const COUNT_USERS = 3;
-const COUNT_BORDS = 1;
-const COUNT_TASK = 2;
-
 const DB = {
   Users: [],
   Boards: [],
@@ -13,16 +9,15 @@ const DB = {
 };
 
 const initDB = () => {
-  for (let i = 0; i < COUNT_USERS; i++) {
+  for (let i = 0; i < 3; i++) {
     DB.Users.push(new User());
   }
-  for (let i = 0; i < COUNT_BORDS; i++) {
-    const board = new Board();
-    DB.Boards.push(board);
-    for (let j = 0; j < COUNT_TASK; i++) {
-      DB.Tasks.push(new Task({ boardId: board.id }));
-    }
-  }
+  const board = new Board();
+  DB.Boards.push(board);
+  DB.Tasks.push(
+    new Task({ boardId: board.id }),
+    new Task({ boardId: board.id })
+  );
 };
 
 const getAllEntities = tableName => {
