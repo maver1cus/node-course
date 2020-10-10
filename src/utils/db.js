@@ -29,9 +29,9 @@ const getEntity = (tableName, id) => {
 };
 
 const removeEntity = (tableName, id) => {
-  const eniity = getEntity(tableName, id);
-  if (eniity) {
-    const index = DB[tableName].indexOf(eniity);
+  const entity = getEntity(tableName, id);
+  if (entity) {
+    const index = DB[tableName].indexOf(entity);
     DB[tableName].splice(index, 1);
     if (tableName === 'Users') {
       DB.Tasks.forEach(task => {
@@ -39,10 +39,12 @@ const removeEntity = (tableName, id) => {
       });
     }
     if (tableName === 'Boards') {
-      DB.Tasks.filter(task => task.boardId === id).forEach(removeEntity());
+      DB.Tasks.filter(task => task.boardId === id).forEach(task =>
+        removeEntity('Tasks', task.id)
+      );
     }
   }
-  return eniity;
+  return entity;
 };
 
 const addEntity = (tableName, entity) => {

@@ -10,7 +10,7 @@ class Board {
     this.title = title;
     this.columns = columns;
   }
-  static getBoard(board) {
+  static fromRequest(board) {
     return new Board(board);
   }
 }
