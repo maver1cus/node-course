@@ -18,31 +18,51 @@ const initDB = () => {
     new Task({ boardId: board.id }),
     new Task({ boardId: board.id })
   );
+
+  const boardTwo = new Board();
+  DB.Boards.push(boardTwo);
+  DB.Tasks.push(
+    new Task({ boardId: boardTwo.id }),
+    new Task({ boardId: boardTwo.id })
+  );
 };
 
-const getAllEntities = tableName => {
-  return DB[tableName];
-};
+const getAllEntities = tableName => DB[tableName].filter(entity => entity);
 
 const getEntity = (tableName, id) => {
-  return DB[tableName].find(entity => entity.id === id);
+  const entities = DB[tableName]
+    .filter(entity => entity)
+    .filter(entity => entity.id === id);
+  if (entities.length > 1) {
+    console.error(
+      `The DB data is damaged. Table: ${tableName}. Entity ID: ${id}`
+    );
+    throw Error('The DB data is wrong!');
+  }
+
+  return entities[0];
 };
 
 const removeEntity = (tableName, id) => {
   const entity = getEntity(tableName, id);
   if (entity) {
-    const index = DB[tableName].indexOf(entity);
-    DB[tableName].splice(index, 1);
     if (tableName === 'Users') {
       DB.Tasks.forEach(task => {
         task.userId = task.userId === id ? null : task.userId;
       });
+      // DB.Tasks.filter(task => task).forEach(task => {
+      //   task.userId = task.userId === entity.id ? null : task.userId;
+      // });
     }
     if (tableName === 'Boards') {
-      DB.Tasks.filter(task => task.boardId === id).forEach(task =>
-        removeEntity('Tasks', task.id)
-      );
+      DB.Tasks.filter(task => task && task.boardId === id).forEach(task => {
+        const index = DB.Tasks.indexOf(task);
+        DB.Tasks.splice(index, 1);
+      });
     }
+    const index = DB[tableName].indexOf(entity);
+
+    DB[tableName].splice(index, 1);
   }
   return entity;
 };

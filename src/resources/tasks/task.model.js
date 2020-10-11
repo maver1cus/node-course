@@ -18,6 +18,9 @@ class Task {
     this.boardId = boardId;
     this.columnId = columnId;
   }
+  static fromRequest(body) {
+    return new Task(body);
+  }
 }
 
 module.exports = Task;
