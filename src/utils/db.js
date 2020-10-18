@@ -50,9 +50,6 @@ const removeEntity = (tableName, id) => {
       DB.Tasks.forEach(task => {
         task.userId = task.userId === id ? null : task.userId;
       });
-      // DB.Tasks.filter(task => task).forEach(task => {
-      //   task.userId = task.userId === entity.id ? null : task.userId;
-      // });
     }
     if (tableName === 'Boards') {
       DB.Tasks.filter(task => task && task.boardId === id).forEach(task => {

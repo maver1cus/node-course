@@ -5,6 +5,7 @@ const YAML = require('yamljs');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/board/board.router');
 const taskRouter = require('./resources/tasks/task.router');
+const errorHandler = require('./utils/error-handler');
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
@@ -25,9 +26,6 @@ app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 boardRouter.use('/:boardId/tasks', taskRouter);
 
-app.use((err, req, res, next) => {
-  res.status(404).send(err.message);
-  next();
-});
+app.use(errorHandler);
 
 module.exports = app;
