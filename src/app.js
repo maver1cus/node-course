@@ -40,13 +40,18 @@ boardRouter.use('/:boardId/tasks', taskRouter);
 app.use(errorHandler);
 
 process.on('uncaughtException', error => {
-  logger.info(
-    `[Inside 'uncaughtException' event] ${error.stack} ${error.message}`
+  const exit = process.exit;
+  logger.error(
+    `[Inside 'uncaughtException' event] ${error.stack} ${error.message}`,
+    exit(1)
   );
 });
 
 process.on('unhandledRejection', (reason, p) => {
-  logger.info(`Unhandled Rejection at: Promise ${p} reason: #${reason}`);
+  const exit = process.exit;
+  logger.error(`Unhandled Rejection at: Promise ${p} reason: #${reason}`, () =>
+    exit(1)
+  );
 });
 
 module.exports = app;

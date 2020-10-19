@@ -6,8 +6,10 @@ const errorHandler = (err, req, res, next) => {
     logger.error(err.message);
     res.status(err.status).send(err.message);
   } else {
-    logger.error('Server Error');
-    res.status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR).send('Server Error');
+    logger.error('Internal Server Error');
+    res
+      .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
+      .send('Internal Server Error');
   }
   next();
 };
