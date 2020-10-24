@@ -1,12 +1,12 @@
 const logger = require('../common/logger');
+const NotFoundError = require('../utils/not-found-error');
 const HTTP_STATUS_CODE = require('./http-status-codes');
 
 const errorHandler = (err, req, res, next) => {
-  if (err.status) {
-    logger.error(err.message);
+  logger.error(err.message);
+  if (err instanceof NotFoundError) {
     res.status(err.status).send(err.message);
   } else {
-    logger.error('Internal Server Error');
     res
       .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
       .send('Internal Server Error');

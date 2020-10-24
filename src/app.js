@@ -8,7 +8,6 @@ const taskRouter = require('./resources/tasks/task.router');
 const errorHandler = require('./utils/error-handler');
 const morgan = require('morgan');
 const logger = require('./common/logger');
-
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
@@ -39,19 +38,12 @@ boardRouter.use('/:boardId/tasks', taskRouter);
 
 app.use(errorHandler);
 
-process.on('uncaughtException', error => {
-  const exit = process.exit;
-  logger.error(
-    `[Inside 'uncaughtException' event] ${error.stack} ${error.message}`,
-    exit(1)
-  );
+process.on('uncaughtException', err => {
+  logger.error(err.stack);
 });
 
-process.on('unhandledRejection', (reason, p) => {
-  const exit = process.exit;
-  logger.error(`Unhandled Rejection at: Promise ${p} reason: #${reason}`, () =>
-    exit(1)
-  );
+process.on('unhandledRejection', err => {
+  logger.error(err.stack);
 });
 
 module.exports = app;
