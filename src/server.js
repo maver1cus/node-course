@@ -3,6 +3,15 @@ const app = require('./app');
 const logger = require('./common/logger');
 const mongoose = require('mongoose');
 const { MONGO_CONNECTION_STRING } = require('./common/config');
+
+process.on('uncaughtException', err => {
+  logger.error(err.stack);
+});
+
+process.on('unhandledRejection', err => {
+  logger.error(err.stack);
+});
+
 mongoose.connect(MONGO_CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
